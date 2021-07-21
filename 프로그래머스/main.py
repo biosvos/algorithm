@@ -3,7 +3,7 @@ def solution():
 
 
 def main():
-    solution()
+    assert solution()
 
 
 if __name__ == '__main__':

@@ -1,63 +1,44 @@
+def manhattan(a, b):
+    return sum(abs(x - y) for x, y in zip(a, b))
+
+
 def solution(numbers, hand):
-    # * --> 10
-    # 0 --> 11
-    # # --> 12
-    answer = []
-    LEFT = 0
-    RIGHT = 1
+    table = [(i, j) for j in range(4) for i in range(3)]
 
-    choice = [
-        None,
-        LEFT, None, RIGHT,
-        LEFT, None, RIGHT,
-        LEFT, None, RIGHT,
-        LEFT, None, RIGHT
-    ]
-
-    left_num = 10
-    right_num = 12
+    left = table[9]
+    right = table[11]
+    answer = ''
     for n in numbers:
-        if choice[n] == LEFT:
-            left_num = n
-            answer.append('L')
-        elif choice[n] == RIGHT:
-            right_num = n
-            answer.append('R')
+        if n == 0:
+            n = 10
         else:
-            if n == 0:
-                n = 11
+            n -= 1
+        touch = table[n]
 
-            l_hand = left_num
-            r_hand = right_num
-            l_dist = 0
-            r_dist = 0
-
-            if choice[left_num] is not None:
-                l_hand += 1
-                l_dist = 3
-
-            if choice[right_num] is not None:
-                r_hand -= 1
-                r_dist = 3
-
-            l_dist += abs(l_hand - n)
-            r_dist += abs(r_hand - n)
-
-            if l_dist < r_dist:
-                left_num = n
-                answer.append('L')
-            elif l_dist > r_dist:
-                right_num = n
-                answer.append('R')
-            else:
+        if n in [0, 3, 6]:
+            left = touch
+            answer += 'L'
+        elif n in [2, 5, 8]:
+            right = touch
+            answer += 'R'
+        else:
+            ld = manhattan(left, touch)
+            rd = manhattan(right, touch)
+            if ld < rd:
+                left = touch
+                answer += 'L'
+            elif ld > rd:
+                right = touch
+                answer += 'R'
+            if ld == rd:
                 if hand == "left":
-                    left_num = n
-                    answer.append('L')
+                    left = touch
+                    answer += 'L'
                 else:
-                    right_num = n
-                    answer.append('R')
+                    right = touch
+                    answer += 'R'
 
-    return ''.join(answer)
+    return answer
 
 
 def main():
